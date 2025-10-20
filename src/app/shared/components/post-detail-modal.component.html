@@ -1,0 +1,194 @@
+<ion-header [translucent]="false" class="detail-header">
+  <ion-toolbar>
+    <div class="header-bar">
+      <div class="header-left">
+        <!-- Terminated Badge -->
+        <div *ngIf="post?.isTerminated" class="terminated-badge">
+          Abgeschlossen
+        </div>
+
+        <!-- Category Badge (e.g., "Seminar") -->
+        <div *ngIf="isSeminarPost() && !post?.isTerminated" class="category-badge">
+          Seminar
+        </div>
+
+        <!-- Creator Info -->
+        <div class="creator-info">
+          <div class="creator-avatar">
+            <ion-icon name="person"></ion-icon>
+          </div>
+          <span class="creator-name">{{ getCreatorName() }}</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Edit Button (Orange) - Show for post creator OR admin -->
+        <ion-button *ngIf="canEditPost" (click)="openEditModal()" class="edit-button">
+          <ion-icon slot="icon-only" name="pencil"></ion-icon>
+        </ion-button>
+
+        <!-- Close Button (Blue) -->
+        <ion-button (click)="dismiss()" class="close-button">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="detail-content">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="bouncing-balls">
+      <div class="ball ball-1"></div>
+      <div class="ball ball-2"></div>
+      <div class="ball ball-3"></div>
+    </div>
+  </div>
+
+  <!-- Post Content -->
+  <div *ngIf="!isLoading && post" class="post-content">
+    <!-- Image Carousel (Horizontal Scroll) -->
+    <div class="image-carousel">
+      <div class="images-scroll-container">
+        <div class="image-item" *ngFor="let image of post.images">
+          <img [src]="image" [alt]="post.title" class="post-image" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="tags-section">
+      <div class="tag-badge" *ngFor="let tag of post.tagObjects">
+        <div class="tag-circle" [style.background-color]="tag.color"></div>
+        <span class="tag-name">{{ tag.name }}</span>
+      </div>
+    </div>
+
+    <!-- Title (Blue) -->
+    <h1 class="post-title">{{ post.title }}</h1>
+
+    <!-- Description -->
+    <div class="post-description">{{ post.description }}</div>
+
+    <!-- Creation Date -->
+    <div class="post-date">{{ formatCreationDate() }}</div>
+
+    <!-- Full Text -->
+    <div class="post-text">
+      <p>{{ post.text }}</p>
+    </div>
+
+    <!-- PayPal Email -->
+    <div class="post-paypal" *ngIf="post.payPalMail && post.payPalMail.trim()">
+      <span class="paypal-label">PayPal:</span> {{ post.payPalMail }}
+    </div>
+
+    <!-- Acceptance Requests Section (Owner Only) -->
+    <div class="acceptance-requests-section" *ngIf="isPostCreator && post.acceptanceList && post.acceptanceList.length > 0">
+      <h3 class="requests-title">
+        Anfragen
+        <span class="requests-count">{{ post.acceptanceList.length }}</span>
+      </h3>
+
+      <div class="requests-list">
+        <div *ngFor="let request of post.acceptanceList" class="request-item">
+          <div class="request-info">
+            <div class="request-avatar">
+              <ion-icon name="person"></ion-icon>
+            </div>
+            <div class="request-details">
+              <span class="request-name">{{ request.userName }}</span>
+              <span class="request-timestamp">{{ formatTimestamp(request.requestedAt) }}</span>
+            </div>
+          </div>
+          <div class="request-actions">
+            <ion-button class="accept-button" (click)="acceptUserRequest(request)" *ngIf="!post.isTerminated">
+              Akzeptieren
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <h3 class="comments-title">Kommentare</h3>
+
+      <!-- Comment Input -->
+      <div class="comment-input-container">
+        <ion-textarea
+          [(ngModel)]="commentText"
+          placeholder="Kommentar schreiben..."
+          [rows]="1"
+          [autoGrow]="true"
+          [disabled]="isSubmittingComment"
+          class="comment-input">
+        </ion-textarea>
+        <ion-button
+          (click)="addComment()"
+          [disabled]="!commentText.trim() || isSubmittingComment"
+          class="send-button">
+          senden
+        </ion-button>
+      </div>
+
+      <!-- Comments List -->
+      <div class="comments-list">
+        <div *ngIf="post.comments && post.comments.length === 0" class="no-comments">
+          <p>Noch keine Kommentare vorhanden.</p>
+        </div>
+
+        <div *ngFor="let comment of post.comments" class="comment-item">
+          <div class="comment-header">
+            <div class="comment-creator">
+              <div class="comment-avatar">
+                <ion-icon name="person"></ion-icon>
+              </div>
+              <div class="comment-info">
+                <span class="comment-author">{{ getCommenterDisplayName(comment) }}</span>
+                <span class="comment-timestamp">{{ formatTimestamp(comment.createdAt) }}</span>
+              </div>
+            </div>
+            <ion-button
+              *ngIf="canDeleteComment(comment)"
+              fill="clear"
+              size="small"
+              (click)="deleteComment(comment)"
+              class="delete-comment-button">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+          </div>
+          <p class="comment-message">{{ comment.message }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !post" class="error-state">
+    <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+    <h2 class="error-title">Post konnte nicht geladen werden</h2>
+    <p class="error-description">Bitte versuchen Sie es später erneut.</p>
+    <ion-button (click)="dismiss()">Schließen</ion-button>
+  </div>
+
+  <!-- FAB (Floating Action Button) - Bottom Right -->
+  <ion-fab *ngIf="!isLoading && post" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="main-fab">
+      <span class="fab-text" (click)="focusCommentInput()">Allen Antworten</span>
+      <ion-icon
+        [name]="showFabList ? 'chevron-up' : 'chevron-down'"
+        (click)="toggleFabList()"
+        class="chevron-icon">
+      </ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Custom Dropdown for "Nehm ich" Button -->
+  <div class="custom-fab-dropdown" *ngIf="!isLoading && post && showFabList && !post.isTerminated && !isPostCreator">
+    <button class="secondary-fab-custom" (click)="handleNehmIch()">
+      <span class="fab-text-small">{{ hasUserRequested ? 'Anfrage stornieren' : 'Nehm ich' }}</span>
+    </button>
+  </div>
+</ion-content>

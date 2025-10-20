@@ -1,0 +1,144 @@
+<ion-content class="create-post-content">
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h1 class="modal-title">Inserat erstellen</h1>
+    <button class="close-button" (click)="dismiss()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </div>
+  
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="post-form">
+
+    <!-- Main Content Row -->
+    <div class="content-row">
+      <div class="left-column">
+        <!-- Title -->
+        <ion-item class="form-item">
+          <ion-label position="stacked">Titel*</ion-label>
+          <ion-input
+            formControlName="title"
+            [class.ion-invalid]="isFieldInvalid('title')"
+            maxlength="100">
+          </ion-input>
+          <div *ngIf="isFieldInvalid('title')" class="error-message">
+            {{ getFieldError('title') }}
+          </div>
+        </ion-item>
+
+        <!-- Description -->
+        <ion-item class="form-item">
+          <ion-label position="stacked">Beschreibung*</ion-label>
+          <ion-textarea
+            formControlName="description"
+            rows="3"
+            [class.ion-invalid]="isFieldInvalid('description')"
+            maxlength="300">
+          </ion-textarea>
+          <div *ngIf="isFieldInvalid('description')" class="error-message">
+            {{ getFieldError('description') }}
+          </div>
+        </ion-item>
+      </div>
+
+      <div class="right-column">
+        <!-- Images Section -->
+        <div class="section">
+          <div class="section-title">Bilder</div>
+          <div class="images-upload-area">
+            <div class="upload-placeholder" (click)="openImageSelector()">
+              <ion-icon name="add" class="upload-icon"></ion-icon>
+            </div>
+
+            <div class="images-container" *ngIf="imageUrls.length > 0">
+              <div class="image-item" *ngFor="let imageUrl of imageUrls; let i = index">
+                <img [src]="imageUrl" [alt]="'Image ' + (i + 1)" class="preview-image" />
+                <ion-button
+                  fill="clear"
+                  color="danger"
+                  class="remove-image-btn"
+                  (click)="removeImageUrl(i)">
+                  <ion-icon name="trash"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PayPal Email -->
+        <ion-item class="form-item paypal-item">
+          <ion-label position="stacked">Paypal</ion-label>
+          <ion-input
+            formControlName="payPalMail"
+            type="email"
+            [class.ion-invalid]="isFieldInvalid('payPalMail')">
+          </ion-input>
+          <div *ngIf="isFieldInvalid('payPalMail')" class="error-message">
+            {{ getFieldError('payPalMail') }}
+          </div>
+        </ion-item>
+      </div>
+    </div>
+
+    <!-- Tags Section (Full Width) -->
+    <div class="section full-width tags-section">
+      <div class="section-title">Tags</div>
+      <ion-item class="form-item">
+        <ion-input
+          [(ngModel)]="currentTag"
+          [ngModelOptions]="{standalone: true}"
+          (keyup.enter)="addTag()"
+          (keyup.space)="addTag()">
+        </ion-input>
+      </ion-item>
+
+      <div class="tags-container" *ngIf="getTags().length > 0">
+        <ion-chip
+          *ngFor="let tag of getTags(); let i = index"
+          class="tag-chip"
+          (click)="removeTag(i)">
+          {{ tag }}
+          <ion-icon name="trash"></ion-icon>
+        </ion-chip>
+      </div>
+    </div>
+
+    <!-- Detailed Text (Full Width) -->
+    <ion-item class="form-item full-width text-section">
+      <ion-label position="stacked">Text*</ion-label>
+      <ion-textarea
+        formControlName="text"
+        rows="6"
+        [class.ion-invalid]="isFieldInvalid('text')"
+        maxlength="2000">
+      </ion-textarea>
+      <div *ngIf="isFieldInvalid('text')" class="error-message">
+        {{ getFieldError('text') }}
+      </div>
+    </ion-item>
+
+    <!-- Hidden input for testing purposes -->
+    <ion-item class="form-item" *ngIf="false">
+      <ion-input 
+        [(ngModel)]="currentImageUrl" 
+        [ngModelOptions]="{standalone: true}"
+        placeholder="Image URL for testing"
+        (keyup.enter)="addImageUrl()">
+      </ion-input>
+      <ion-button slot="end" fill="clear" (click)="addImageUrl()" [disabled]="!currentImageUrl.trim()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+  </form>
+
+  <!-- Floating Action Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button
+      type="submit"
+      (click)="onSubmit()"
+      [disabled]="!postForm.valid || isSubmitting"
+      class="submit-fab">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

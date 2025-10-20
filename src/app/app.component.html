@@ -1,0 +1,71 @@
+<ion-app>
+  @if (showMenu && authService.isAuthReady() && authService.currentUser()) {
+    <ion-split-pane contentId="main-content">
+      <ion-menu contentId="main-content" type="overlay">
+        <ion-content class="menu-content">
+          <div class="menu-wrapper">
+            <div class="menu-logo">
+              <img src="assets/shared/LOGO.svg" alt="Bazzar Logo">
+            </div>
+            <ion-list id="menu-list" lines="none">
+              @for (p of appPages; track p; let i = $index) {
+                <ion-menu-toggle auto-hide="false">
+                  <ion-item
+                    routerDirection="root"
+                    [routerLink]="[p.url]"
+                    lines="none"
+                    detail="false"
+                    routerLinkActive="selected"
+                    class="menu-item">
+                    <div slot="start" class="icon-wrapper">
+                      @switch (p.icon) {
+                        @case ('icon-home') {
+                          <app-icon-home [size]="24" [color]="isSelected(p.url) ? '#FAFAFA' : '#1D1D1D'"></app-icon-home>
+                        }
+                        @case ('icon-smartphone') {
+                          <app-icon-smartphone [size]="24" [color]="isSelected(p.url) ? '#FAFAFA' : '#1D1D1D'"></app-icon-smartphone>
+                        }
+                        @case ('icon-heart') {
+                          <app-icon-heart [size]="24"></app-icon-heart>
+                        }
+                        @case ('icon-bell') {
+                          <app-icon-bell [size]="24" [color]="isSelected(p.url) ? '#FAFAFA' : '#1D1D1D'"></app-icon-bell>
+                        }
+                        @case ('icon-settings') {
+                          <app-icon-settings [size]="24"></app-icon-settings>
+                        }
+                      }
+                    </div>
+                    <ion-label>{{ p.title }}</ion-label>
+                  </ion-item>
+                </ion-menu-toggle>
+              }
+            </ion-list>
+
+            @if (authService.currentUserProfile(); as userProfile) {
+              <div class="user-profile">
+                <div class="avatar-wrapper" (mouseenter)="onProfileHover()" (mouseleave)="onProfileLeave()">
+                  <div class="avatar">
+                    <ion-icon name="person"></ion-icon>
+                  </div>
+                  @if (showLogout) {
+                    <div class="logout-overlay" (click)="handleLogout()">
+                      <ion-icon name="log-out"></ion-icon>
+                    </div>
+                  }
+                </div>
+                <div class="user-info">
+                  <div class="user-name">{{ userProfile.vorname }} {{ userProfile.name }}</div>
+                  <div class="user-tag">{{ userProfile.zenturie }}</div>
+                </div>
+              </div>
+            }
+          </div>
+        </ion-content>
+      </ion-menu>
+      <ion-router-outlet id="main-content"></ion-router-outlet>
+    </ion-split-pane>
+  } @else {
+    <ion-router-outlet></ion-router-outlet>
+  }
+</ion-app>

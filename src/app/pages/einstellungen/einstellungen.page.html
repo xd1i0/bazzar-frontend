@@ -1,0 +1,297 @@
+<ion-header [translucent]="false">
+  <ion-toolbar class="header-toolbar">
+    <div class="header-content">
+      <div class="header-left">
+        <ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+      </div>
+
+      <div class="header-center">
+        <ion-title>Einstellungen</ion-title>
+      </div>
+
+      <div class="header-right">
+        <div class="view-toggle">
+          <button
+            class="view-toggle-button"
+            [class.active]="viewMode === 'grid'"
+            (click)="setViewMode('grid')">
+            <ion-icon name="grid-outline"></ion-icon>
+          </button>
+          <button
+            class="view-toggle-button"
+            [class.active]="viewMode === 'list'"
+            (click)="setViewMode('list')">
+            <ion-icon name="list-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div class="content-wrapper">
+    <!-- Loading Screen -->
+    <div *ngIf="isLoading && !isRefreshing" class="loading-container">
+      <div class="bouncing-balls">
+        <div class="ball ball-1"></div>
+        <div class="ball ball-2"></div>
+        <div class="ball ball-3"></div>
+      </div>
+    </div>
+
+    <!-- Content (when not loading) -->
+    <div *ngIf="!isLoading || isRefreshing">
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <h2 class="section-title">Profil</h2>
+
+        <div class="profile-card" *ngIf="authService.currentUserProfile() as profile">
+          <!-- View Mode -->
+          <div *ngIf="!editMode" class="profile-view">
+            <div class="profile-info-grid">
+              <div class="profile-field">
+                <label class="field-label">Vorname</label>
+                <p class="field-value">{{ profile.vorname }}</p>
+              </div>
+              <div class="profile-field">
+                <label class="field-label">Name</label>
+                <p class="field-value">{{ profile.name }}</p>
+              </div>
+              <div class="profile-field">
+                <label class="field-label">Zenturie</label>
+                <p class="field-value">{{ profile.zenturie }}</p>
+              </div>
+              <div class="profile-field">
+                <label class="field-label">Email</label>
+                <p class="field-value">{{ profile.email }}</p>
+              </div>
+            </div>
+            <button class="edit-button" (click)="enterEditMode()">
+              Profil bearbeiten
+            </button>
+          </div>
+
+          <!-- Edit Mode -->
+          <div *ngIf="editMode" class="profile-edit">
+            <form class="profile-form">
+              <ion-item class="form-item">
+                <ion-label position="stacked">Vorname</ion-label>
+                <ion-input
+                  [(ngModel)]="profileForm.vorname"
+                  name="vorname"
+                  type="text"
+                  placeholder="Vorname eingeben">
+                </ion-input>
+              </ion-item>
+
+              <ion-item class="form-item">
+                <ion-label position="stacked">Name</ion-label>
+                <ion-input
+                  [(ngModel)]="profileForm.name"
+                  name="name"
+                  type="text"
+                  placeholder="Name eingeben">
+                </ion-input>
+              </ion-item>
+
+              <ion-item class="form-item">
+                <ion-label position="stacked">Zenturie</ion-label>
+                <ion-input
+                  [(ngModel)]="profileForm.zenturie"
+                  name="zenturie"
+                  type="text"
+                  placeholder="Zenturie eingeben">
+                </ion-input>
+              </ion-item>
+
+              <ion-item class="form-item">
+                <ion-label position="stacked">Email</ion-label>
+                <ion-input
+                  [(ngModel)]="profileForm.email"
+                  name="email"
+                  type="email"
+                  placeholder="Email eingeben">
+                </ion-input>
+              </ion-item>
+
+              <div class="form-actions">
+                <button
+                  type="button"
+                  class="cancel-button"
+                  (click)="cancelEdit()"
+                  [disabled]="isSaving">
+                  <ion-icon name="close"></ion-icon>
+                  Abbrechen
+                </button>
+                <button
+                  type="button"
+                  class="save-button"
+                  (click)="saveProfile()"
+                  [disabled]="isSaving">
+                  <ion-icon name="save"></ion-icon>
+                  {{ isSaving ? 'Speichern...' : 'Speichern' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Posts Section -->
+      <div class="posts-section">
+        <h2 class="section-title">Meine Inserate</h2>
+
+        <!-- Empty State Message -->
+        <div *ngIf="myPosts.length === 0" class="empty-state">
+          <ion-icon name="person" class="empty-icon"></ion-icon>
+          <h3 class="empty-title">Keine Inserate vorhanden</h3>
+          <p class="empty-description">Du hast noch keine Artikel veröffentlicht.</p>
+        </div>
+
+        <!-- Grid View -->
+        <div *ngIf="viewMode === 'grid' && myPosts.length > 0" class="grid-view">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of myPosts">
+                <div class="item-card" (click)="onCardClick(item)">
+                  <img [src]="item.image" [alt]="item.title" class="card-image" />
+                  <div class="tags-container">
+                    <div class="tag-badge" *ngFor="let tag of item.tagObjects">
+                      <div class="tag-circle" [style.background-color]="tag.color"></div>
+                      <span class="tag-name">{{ tag.name }}</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    @if (authService.currentUserProfile()) {
+                      <div class="profile-avatar">
+                        <ion-icon name="person"></ion-icon>
+                      </div>
+                      <div class="card-info">
+                        <h3 class="post-title">{{ item.title }}</h3>
+                        <p class="post-description">{{ item.description }}</p>
+                      </div>
+                    }
+                    <button
+                      class="favorite-button"
+                      (click)="toggleFavorite(item, $event)"
+                      [class.favorited]="item.isFavorite">
+                      <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                    </button>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="viewMode === 'list' && myPosts.length > 0" class="list-view">
+          <div class="list-item" *ngFor="let item of myPosts" (click)="onCardClick(item)">
+            <div class="list-content">
+              @if (authService.currentUserProfile()) {
+                <div class="profile-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </div>
+                <div class="list-info">
+                  <h3 class="post-title">{{ item.title }}</h3>
+                  <p class="post-description">{{ item.description }}</p>
+                </div>
+              }
+              <button
+                class="favorite-button"
+                (click)="toggleFavorite(item, $event)"
+                [class.favorited]="item.isFavorite">
+                <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+              </button>
+            </div>
+            <img [src]="item.image" [alt]="item.title" class="list-image" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Accepted Posts Section -->
+      <div class="posts-section">
+        <h2 class="section-title">Angenommen</h2>
+
+        <!-- Empty State Message -->
+        <div *ngIf="acceptedPosts.length === 0" class="empty-state">
+          <ion-icon name="checkmark-circle" class="empty-icon"></ion-icon>
+          <h3 class="empty-title">Keine angenommenen Anfragen</h3>
+          <p class="empty-description">Du wurdest noch bei keinem Inserat akzeptiert.</p>
+        </div>
+
+        <!-- Grid View -->
+        <div *ngIf="viewMode === 'grid' && acceptedPosts.length > 0" class="grid-view">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of acceptedPosts">
+                <div class="item-card" (click)="onCardClick(item)">
+                  <img [src]="item.image" [alt]="item.title" class="card-image" />
+                  <div class="tags-container">
+                    <div class="tag-badge" *ngFor="let tag of item.tagObjects">
+                      <div class="tag-circle" [style.background-color]="tag.color"></div>
+                      <span class="tag-name">{{ tag.name }}</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    @if (authService.currentUserProfile()) {
+                      <div class="profile-avatar">
+                        <ion-icon name="person"></ion-icon>
+                      </div>
+                      <div class="card-info">
+                        <h3 class="post-title">{{ item.title }}</h3>
+                        <p class="post-description">{{ item.description }}</p>
+                      </div>
+                    }
+                    <button
+                      class="favorite-button"
+                      (click)="toggleFavorite(item, $event)"
+                      [class.favorited]="item.isFavorite">
+                      <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                    </button>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="viewMode === 'list' && acceptedPosts.length > 0" class="list-view">
+          <div class="list-item" *ngFor="let item of acceptedPosts" (click)="onCardClick(item)">
+            <div class="list-content">
+              @if (authService.currentUserProfile()) {
+                <div class="profile-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </div>
+                <div class="list-info">
+                  <h3 class="post-title">{{ item.title }}</h3>
+                  <p class="post-description">{{ item.description }}</p>
+                </div>
+              }
+              <button
+                class="favorite-button"
+                (click)="toggleFavorite(item, $event)"
+                [class.favorited]="item.isFavorite">
+                <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+              </button>
+            </div>
+            <img [src]="item.image" [alt]="item.title" class="list-image" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

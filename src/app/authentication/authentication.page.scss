@@ -1,0 +1,412 @@
+.auth-content {
+  --background: #FAFAFA;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  // Force hardware acceleration for iOS WKWebView
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.auth-container {
+  display: flex;
+  align-items: center; // Center on desktop/PWA
+  justify-content: center;
+  min-height: 100vh; // Reliable fallback for all devices
+  padding: 24px;
+  padding-top: max(24px, env(safe-area-inset-top, 24px));
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+  background: #FAFAFA;
+  overflow-y: auto; // Allow scrolling when content is too tall
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
+  // Force rendering for iPhone WKWebView
+  will-change: contents;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  // On larger screens where content fits, keep centered
+  @media (min-height: 700px) and (min-width: 481px) {
+    align-items: center;
+  }
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: #FFFFFF; // Changed from #E5E5E5 for better contrast on iPhone
+  border-radius: 10px;
+  padding: 48px 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); // Increased shadow for visibility
+
+  // Force rendering on iPhone
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  position: relative; // Establish stacking context
+  z-index: 1;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .auth-logo {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1D1D1D;
+    margin-left: 4px;
+  }
+
+  ion-input {
+    --background: #FAFAFA;
+    --color: #1D1D1D;
+    --placeholder-color: #999999;
+    --placeholder-opacity: 1;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    --border-radius: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+
+    &::part(native) {
+      border-radius: 10px;
+    }
+
+    &:focus-within {
+      border-color: #1D1D1D;
+    }
+  }
+}
+
+.error-message {
+  padding: 12px 16px;
+  background: rgba(235, 68, 90, 0.1);
+  border-radius: 10px;
+  text-align: center;
+
+  ion-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #eb445a;
+  }
+}
+
+.submit-button {
+  --background: #003A79;
+  --background-hover: #002a5a;
+  --background-activated: #001f44;
+  --color: #FAFAFA;
+  --border-radius: 10px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  height: 52px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+
+  &::part(native) {
+    transition: all 0.2s ease;
+  }
+
+  &:hover:not([disabled]) {
+    --background: #002a5a;
+  }
+
+  &:active:not([disabled]) {
+    --background: #001f44;
+  }
+
+  &[disabled] {
+    --background: #7A9FBF;
+    --color: #FAFAFA;
+    opacity: 0.5;
+  }
+}
+
+.toggle-mode {
+  margin-top: 24px;
+  text-align: center;
+
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+    margin: 0;
+
+    a {
+      color: #FF8A41;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #e67834;
+      }
+
+      &:active {
+        color: #d46d2e;
+      }
+    }
+  }
+}
+
+.checking-auth {
+  text-align: center;
+  padding: 24px;
+  
+  ion-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666666;
+  }
+}
+
+// Responsive adjustments for tablets
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 40px 24px;
+  }
+
+  .auth-header {
+    margin-bottom: 32px;
+
+    .auth-logo {
+      max-width: 160px;
+    }
+  }
+}
+
+// iPhone and large mobile phones
+@media (max-width: 480px) {
+  .auth-container {
+    align-items: flex-start; // Allow scrolling on mobile
+    padding: 16px;
+    padding-top: max(40px, env(safe-area-inset-top, 16px)); // Add more top padding for visual centering
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    padding-left: max(16px, env(safe-area-inset-left, 16px));
+    padding-right: max(16px, env(safe-area-inset-right, 16px));
+  }
+
+  .auth-card {
+    padding: 28px 18px; // Reduced from 32px 20px
+    border-radius: 10px;
+    margin-bottom: 16px; // Ensure space at bottom when scrolling
+  }
+
+  .auth-header {
+    margin-bottom: 24px; // Reduced from 28px
+
+    .auth-logo {
+      max-width: 120px; // Reduced from 140px
+    }
+  }
+
+  .auth-form {
+    gap: 16px; // Reduced from 20px
+  }
+
+  .input-group {
+    gap: 6px;
+
+    label {
+      font-size: 16px; // Minimum 16px to prevent iOS auto-zoom
+      margin-left: 2px;
+    }
+
+    ion-input {
+      font-size: 16px; // Minimum 16px to prevent iOS auto-zoom
+      --padding-start: 14px;
+      --padding-end: 14px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+    }
+  }
+
+  .submit-button {
+    height: 48px; // Reduced from 50px
+    font-size: 16px;
+    margin-top: 4px;
+    min-height: 44px; // iOS minimum touch target
+  }
+
+  .toggle-mode {
+    margin-top: 16px; // Reduced from 20px
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .error-message {
+    padding: 10px 14px;
+
+    ion-text {
+      font-size: 14px;
+    }
+  }
+}
+
+// Small iPhones (SE, mini, older models - 375px and below)
+@media (max-width: 375px) {
+  .auth-container {
+    padding: 12px;
+    padding-top: max(32px, env(safe-area-inset-top, 12px)); // More top padding for centering
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    padding-left: max(12px, env(safe-area-inset-left, 12px));
+    padding-right: max(12px, env(safe-area-inset-right, 12px));
+  }
+
+  .auth-card {
+    padding: 24px 14px; // Further reduced
+    margin-bottom: 12px;
+  }
+
+  .auth-header {
+    margin-bottom: 20px; // Further reduced
+
+    .auth-logo {
+      max-width: 100px; // Further reduced for very small screens
+    }
+  }
+
+  .auth-form {
+    gap: 14px; // Further reduced to fit registration form
+  }
+
+  .input-group {
+    gap: 5px; // Tighter spacing
+
+    label {
+      font-size: 16px; // Keep 16px minimum for iOS
+      margin-left: 2px;
+    }
+
+    ion-input {
+      font-size: 16px; // Keep 16px minimum for iOS
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --padding-top: 10px; // Slightly reduced
+      --padding-bottom: 10px;
+    }
+  }
+
+  .submit-button {
+    height: 46px; // Slightly smaller
+    font-size: 16px;
+    --padding-top: 11px;
+    --padding-bottom: 11px;
+    min-height: 44px; // iOS minimum touch target
+    margin-top: 2px;
+  }
+
+  .toggle-mode {
+    margin-top: 14px; // Reduced
+
+    p {
+      font-size: 13px;
+
+      a {
+        margin-left: 3px;
+      }
+    }
+  }
+
+  .error-message {
+    padding: 8px 12px;
+    margin-top: -2px; // Negative margin to save space
+
+    ion-text {
+      font-size: 13px;
+    }
+  }
+
+  .checking-auth {
+    padding: 16px;
+
+    ion-text {
+      font-size: 14px;
+    }
+  }
+}
+
+// Extra small screens (iPhone SE 1st gen - 320px width)
+@media (max-width: 320px) {
+  .auth-card {
+    padding: 20px 12px;
+  }
+
+  .auth-header {
+    margin-bottom: 16px;
+
+    .auth-logo {
+      max-width: 90px;
+    }
+  }
+
+  .auth-form {
+    gap: 12px;
+  }
+
+  .input-group {
+    gap: 4px;
+  }
+
+  .submit-button {
+    height: 44px;
+    margin-top: 0;
+  }
+
+  .toggle-mode {
+    margin-top: 12px;
+
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
+// Platform-specific adjustments
+@media (prefers-color-scheme: dark) {
+  // Override dark mode to maintain grayscale design
+  .auth-content {
+    --background: #D9D9D9;
+  }
+
+  .auth-container {
+    background: #D9D9D9;
+  }
+
+  .auth-card {
+    background: #FFFFFF; // Keep white even in dark mode for consistency
+  }
+}

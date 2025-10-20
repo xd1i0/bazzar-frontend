@@ -1,0 +1,91 @@
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading Screen -->
+  <div *ngIf="isLoading && !isRefreshing" class="loading-container">
+    <div class="bouncing-balls">
+      <div class="ball ball-1"></div>
+      <div class="ball ball-2"></div>
+      <div class="ball ball-3"></div>
+    </div>
+  </div>
+
+  <!-- Content (when not loading) -->
+  <div *ngIf="!isLoading || isRefreshing" class="doomies-container">
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="scrollable-content" #scrollContent>
+        <div *ngFor="let post of posts; let i = index; let last = last"
+             class="short-card"
+             [attr.data-index]="i">
+
+          <!-- Meme Template -->
+          <ng-container *ngIf="asMeme(post) as memePost">
+            <div class="meme-container">
+              <img [src]="memePost.imageUrl" class="short-image meme-image" [alt]="memePost.altText"/>
+              <div class="short-header">
+                <div class="profile-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </div>
+                <div class="author-info">
+                  <strong>dasistschoen.de</strong>
+                </div>
+              </div>
+              <div class="meme-footer" (click)="openMemeLink(memePost, $event)">
+                <h4>{{ memePost.title }}</h4>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Post Template -->
+          <ng-container *ngIf="asPost(post) as bazzarPost">
+            <img [src]="getCurrentImage(bazzarPost)" class="short-image bazzar-image" alt="Post image"/>
+
+            <!-- Carousel indicators for multiple images -->
+            <div *ngIf="hasMultipleImages(bazzarPost)" class="carousel-indicators">
+              <span 
+                *ngFor="let img of bazzarPost.images; let idx = index" 
+                class="indicator-dot"
+                [class.active]="getCurrentImageIndex(bazzarPost.id) === idx">
+              </span>
+            </div>
+
+            <div class="short-header">
+              <div class="profile-avatar">
+                <ion-icon name="person"></ion-icon>
+              </div>
+              <div class="author-info">
+                <strong>{{ bazzarPost.creatorMail }}</strong>
+              </div>
+            </div>
+
+            <div class="short-content" (click)="openDetailModal(bazzarPost, $event)">
+              <h4>{{ bazzarPost.title }}</h4>
+              <p>{{ bazzarPost.description }}</p>
+            </div>
+
+            <div class="short-actions">
+              <button class="action-button" [class.favorited]="bazzarPost.isFavorite" (click)="toggleFavorite(bazzarPost, $event)">
+                <ion-icon [name]="bazzarPost.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+              </button>
+              <button class="action-button" (click)="openCommentModal(bazzarPost, $event)">
+                <ion-icon name="chatbubble-outline"></ion-icon>
+              </button>
+              <button class="action-button" (click)="sharePost(bazzarPost, $event)">
+                <ion-icon name="share-social-outline"></ion-icon>
+              </button>
+              <button class="action-button" (click)="toggleMute($event)">
+                <ion-icon [name]="isMuted ? 'volume-mute-outline' : 'volume-medium-outline'"></ion-icon>
+              </button>
+            </div>
+          </ng-container>
+
+          <!-- Invisible trigger element for intersection observer -->
+          <div *ngIf="i === posts.length - 3" class="scroll-trigger" #scrollTrigger></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,462 @@
+.verification-content {
+  --background: #FAFAFA;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  // Force hardware acceleration for iOS WKWebView
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.verification-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  padding-top: max(24px, env(safe-area-inset-top, 24px));
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+  background: #FAFAFA;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  // Force rendering for iPhone WKWebView
+  will-change: contents;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  @media (min-height: 700px) and (min-width: 481px) {
+    align-items: center;
+  }
+}
+
+.verification-card {
+  width: 100%;
+  max-width: 440px;
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 48px 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  // Force rendering on iPhone
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  position: relative;
+  z-index: 1;
+}
+
+.verification-header {
+  text-align: center;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .verification-logo {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.verification-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+
+  ion-icon {
+    font-size: 64px;
+    color: #003A79;
+  }
+}
+
+.verification-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1D1D1D;
+  margin: 0 0 16px 0;
+}
+
+.verification-message {
+  text-align: center;
+  font-size: 14px;
+  color: #666666;
+  line-height: 1.6;
+  margin: 0;
+
+  strong {
+    color: #003A79;
+    font-weight: 600;
+  }
+}
+
+.error-message {
+  padding: 12px 16px;
+  background: rgba(235, 68, 90, 0.1);
+  border-radius: 10px;
+  text-align: center;
+
+  ion-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #eb445a;
+  }
+}
+
+.submit-button {
+  --background: #003A79;
+  --background-hover: #002a5a;
+  --background-activated: #001f44;
+  --color: #FAFAFA;
+  --border-radius: 10px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  height: 52px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+
+  &::part(native) {
+    transition: all 0.2s ease;
+  }
+
+  &:hover:not([disabled]) {
+    --background: #002a5a;
+  }
+
+  &:active:not([disabled]) {
+    --background: #001f44;
+  }
+
+  &[disabled] {
+    --background: #7A9FBF;
+    --color: #FAFAFA;
+    opacity: 0.5;
+  }
+
+  ion-spinner {
+    margin-right: 8px;
+  }
+}
+
+.resend-button {
+  --border-color: #003A79;
+  --color: #003A79;
+  --border-width: 2px;
+  --border-radius: 10px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  height: 52px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  transition: all 0.2s ease;
+
+  &:hover:not([disabled]) {
+    --background: rgba(0, 58, 121, 0.05);
+  }
+
+  &:active:not([disabled]) {
+    --background: rgba(0, 58, 121, 0.1);
+  }
+
+  &[disabled] {
+    --border-color: #7A9FBF;
+    --color: #7A9FBF;
+    opacity: 0.5;
+  }
+
+  ion-spinner {
+    margin-right: 8px;
+  }
+
+  ion-icon {
+    margin-right: 4px;
+  }
+}
+
+.info-box {
+  padding: 16px;
+  background: #FAFAFA;
+  border-radius: 10px;
+  margin-top: 8px;
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #666666;
+    text-align: center;
+    line-height: 1.5;
+
+    strong {
+      color: #1D1D1D;
+      font-weight: 600;
+    }
+  }
+}
+
+.logout-section {
+  margin-top: 8px;
+  text-align: center;
+
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+    margin: 0;
+
+    a {
+      color: #FF8A41;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #e67834;
+      }
+
+      &:active {
+        color: #d46d2e;
+      }
+    }
+  }
+}
+
+// Responsive adjustments for tablets
+@media (max-width: 768px) {
+  .verification-card {
+    padding: 40px 24px;
+  }
+
+  .verification-header {
+    margin-bottom: 32px;
+
+    .verification-logo {
+      max-width: 160px;
+    }
+  }
+}
+
+// iPhone and large mobile phones
+@media (max-width: 480px) {
+  .verification-container {
+    align-items: flex-start;
+    padding: 16px;
+    padding-top: max(40px, env(safe-area-inset-top, 16px));
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    padding-left: max(16px, env(safe-area-inset-left, 16px));
+    padding-right: max(16px, env(safe-area-inset-right, 16px));
+  }
+
+  .verification-card {
+    padding: 28px 18px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+
+  .verification-header {
+    margin-bottom: 24px;
+
+    .verification-logo {
+      max-width: 120px;
+    }
+  }
+
+  .verification-form {
+    gap: 16px;
+  }
+
+  .icon-container {
+    margin-bottom: 4px;
+
+    ion-icon {
+      font-size: 56px;
+    }
+  }
+
+  .verification-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .verification-message {
+    font-size: 14px;
+  }
+
+  .submit-button,
+  .resend-button {
+    height: 48px;
+    font-size: 16px;
+    margin-top: 4px;
+    min-height: 44px;
+  }
+
+  .info-box {
+    padding: 12px;
+    margin-top: 4px;
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .logout-section {
+    margin-top: 4px;
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+// Small iPhones (SE, mini, older models - 375px and below)
+@media (max-width: 375px) {
+  .verification-container {
+    padding: 12px;
+    padding-top: max(32px, env(safe-area-inset-top, 12px));
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    padding-left: max(12px, env(safe-area-inset-left, 12px));
+    padding-right: max(12px, env(safe-area-inset-right, 12px));
+  }
+
+  .verification-card {
+    padding: 24px 14px;
+    margin-bottom: 12px;
+  }
+
+  .verification-header {
+    margin-bottom: 20px;
+
+    .verification-logo {
+      max-width: 100px;
+    }
+  }
+
+  .verification-form {
+    gap: 14px;
+  }
+
+  .icon-container {
+    ion-icon {
+      font-size: 48px;
+    }
+  }
+
+  .verification-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .verification-message {
+    font-size: 13px;
+  }
+
+  .submit-button,
+  .resend-button {
+    height: 46px;
+    font-size: 16px;
+    --padding-top: 11px;
+    --padding-bottom: 11px;
+    min-height: 44px;
+    margin-top: 2px;
+  }
+
+  .info-box {
+    padding: 10px;
+
+    p {
+      font-size: 11px;
+    }
+  }
+
+  .logout-section {
+    margin-top: 2px;
+
+    p {
+      font-size: 13px;
+    }
+  }
+
+  .error-message {
+    padding: 10px 14px;
+
+    ion-text {
+      font-size: 13px;
+    }
+  }
+}
+
+// Extra small screens (iPhone SE 1st gen - 320px width)
+@media (max-width: 320px) {
+  .verification-card {
+    padding: 20px 12px;
+  }
+
+  .verification-header {
+    margin-bottom: 16px;
+
+    .verification-logo {
+      max-width: 90px;
+    }
+  }
+
+  .verification-form {
+    gap: 12px;
+  }
+
+  .icon-container {
+    ion-icon {
+      font-size: 40px;
+    }
+  }
+
+  .verification-title {
+    font-size: 16px;
+  }
+
+  .verification-message {
+    font-size: 12px;
+  }
+
+  .submit-button,
+  .resend-button {
+    height: 44px;
+    margin-top: 0;
+  }
+
+  .logout-section {
+    margin-top: 0;
+
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
+// Platform-specific adjustments
+@media (prefers-color-scheme: dark) {
+  .verification-content {
+    --background: #D9D9D9;
+  }
+
+  .verification-container {
+    background: #D9D9D9;
+  }
+
+  .verification-card {
+    background: #FFFFFF;
+  }
+}

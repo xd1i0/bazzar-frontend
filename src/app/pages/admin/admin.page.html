@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <ion-icon name="shield"></ion-icon>
+      Admin Panel
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="admin-container">
+    <!-- Admin Status -->
+    <ion-card class="admin-status-card">
+      <ion-card-header>
+        <ion-card-title>Admin-Status</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="admin-info">
+          <ion-icon name="shield" color="primary"></ion-icon>
+          <div class="admin-details">
+            <p class="admin-name" *ngIf="userProfile()">
+              {{ userProfile()?.vorname }} {{ userProfile()?.name }}
+            </p>
+            <p class="admin-email" *ngIf="userProfile()">
+              {{ userProfile()?.email }}
+            </p>
+            <ion-badge color="success">Administrator</ion-badge>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Admin Capabilities -->
+    <ion-card class="capabilities-card">
+      <ion-card-header>
+        <ion-card-title>Admin-Berechtigungen</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="capability-list">
+          <div class="capability-item">
+            <ion-icon name="trash" color="danger"></ion-icon>
+            <div class="capability-text">
+              <h3>Beiträge & Kommentare löschen</h3>
+              <p>Lösche jeden Beitrag oder Kommentar, unabhängig vom Ersteller</p>
+            </div>
+          </div>
+
+          <div class="capability-item">
+            <ion-icon name="flag" color="warning"></ion-icon>
+            <div class="capability-text">
+              <h3>Content-Moderation</h3>
+              <p>Markiere und moderiere unangemessene Inhalte</p>
+            </div>
+          </div>
+
+          <div class="capability-item">
+            <ion-icon name="alert-circle" color="primary"></ion-icon>
+            <div class="capability-text">
+              <h3>Erweiterte Berechtigungen</h3>
+              <p>Bearbeite alle Beiträge und greife auf Admin-Funktionen zu</p>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Quick Actions -->
+    <ion-card class="actions-card">
+      <ion-card-header>
+        <ion-card-title>Schnellzugriff</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="action-buttons">
+          <ion-button expand="block" color="primary" (click)="navigateToModeration()">
+            <ion-icon slot="start" name="flag"></ion-icon>
+            Moderation
+          </ion-button>
+
+          <ion-button expand="block" color="secondary" (click)="navigateToUserManagement()">
+            <ion-icon slot="start" name="people"></ion-icon>
+            Benutzerverwaltung
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Info Box -->
+    <div class="info-box">
+      <ion-icon name="alert-circle" color="primary"></ion-icon>
+      <p>
+        Als Administrator hast du erweiterte Rechte. Verwende diese verantwortungsvoll.
+        Du kannst jetzt alle Beiträge und Kommentare bearbeiten oder löschen, indem du sie normal öffnest.
+      </p>
+    </div>
+  </div>
+</ion-content>

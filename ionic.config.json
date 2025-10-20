@@ -1,0 +1,7 @@
+{
+  "name": "bazzar",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

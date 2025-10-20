@@ -1,0 +1,222 @@
+// Menu content styling
+ion-menu {
+  --width: 260px;
+  width: 260px;
+  max-width: 260px;
+  border-radius: 0 0px 0px 0;
+  overflow: hidden;
+}
+
+ion-menu ion-content {
+  --background: #FAFAFA;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+.menu-content {
+  --background: #FAFAFA;
+  border-radius: 0 10px 10px 0;
+}
+
+.menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 0 24px 0;
+}
+
+// Logo styling
+.menu-logo {
+  padding: 20px 20px 32px 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  img {
+    max-width: 140px;
+    height: auto;
+  }
+}
+
+// Menu list styling
+#menu-list {
+  background: transparent;
+  padding: 0 16px 0 16px;
+  flex: 1;
+}
+
+// Menu item styling
+.menu-item {
+  --background: #F7F7F7;
+  --background-hover: #F7F7F7;
+  --background-activated: #F7F7F7;
+  --background-focused: #F7F7F7;
+  --ripple-color: transparent;
+  --transition: none;
+  --color: #1D1D1D;
+  --padding-start: 28px;
+  --padding-end: 8px;
+  --inner-padding-end: 0;
+  --min-height: 48px;
+  margin-bottom: 8px;
+  margin-left: -16px;
+  margin-right: 0;
+  max-width: 280px;
+  border-radius: 0 10px 10px 0;
+  font-size: 17px;
+  font-weight: 500;
+  transition: none !important;
+
+  &::part(native) {
+    transition: none !important;
+  }
+
+  ion-ripple-effect {
+    display: none;
+  }
+
+  ion-label {
+    margin-left: 8px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #1D1D1D;
+  }
+
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #1D1D1D;
+  }
+
+  // Selected state styling
+  &.selected {
+    --background: #003A79 !important;
+    --background-hover: #003A79 !important;
+    --background-activated: #003A79 !important;
+    --background-focused: #003A79 !important;
+    --ripple-color: transparent;
+    --transition: none;
+    --color: #FAFAFA;
+    --padding-start: 28px;
+    --padding-end: 8px;
+    border-radius: 0 10px 10px 0;
+    margin-left: -16px;
+    margin-right: 0;
+    max-width: 280px;
+    transition: none !important;
+
+    &::part(native) {
+      transition: none !important;
+    }
+
+    ion-label {
+      color: #FAFAFA;
+    }
+
+    .icon-wrapper {
+      color: #FAFAFA;
+    }
+
+    ion-ripple-effect {
+      display: none;
+    }
+  }
+}
+
+// User profile section at bottom
+.user-profile {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px 16px 16px;
+  margin-top: auto;
+  gap: 12px;
+
+  .avatar-wrapper {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #003A79;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease;
+
+      ion-icon {
+        font-size: 24px;
+        color: #FAFAFA;
+      }
+    }
+
+    .logout-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0, 58, 121, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+
+      ion-icon {
+        font-size: 20px;
+        color: #FAFAFA;
+      }
+    }
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .user-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1D1D1D;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 160px;
+    }
+
+    .user-tag {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666666;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Platform-specific adjustments
+ion-menu.ios {
+  .menu-item {
+    --min-height: 48px;
+  }
+}
+
+ion-menu.md {
+  .menu-item {
+    --min-height: 48px;
+  }
+}

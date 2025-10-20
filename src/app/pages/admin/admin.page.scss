@@ -1,0 +1,121 @@
+.admin-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+ion-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  ion-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.admin-status-card {
+  margin-bottom: 1rem;
+}
+
+.admin-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  ion-icon {
+    font-size: 3rem;
+  }
+
+  .admin-details {
+    flex: 1;
+
+    .admin-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+    }
+
+    .admin-email {
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      margin: 0 0 0.5rem 0;
+    }
+
+    ion-badge {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.capabilities-card {
+  margin-bottom: 1rem;
+}
+
+.capability-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.capability-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+
+  ion-icon {
+    font-size: 2rem;
+    margin-top: 0.25rem;
+  }
+
+  .capability-text {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+.actions-card {
+  margin-bottom: 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  ion-button {
+    margin: 0;
+  }
+}
+
+.info-box {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: var(--ion-color-light);
+  border-radius: 8px;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+
+  ion-icon {
+    font-size: 1.5rem;
+    margin-top: 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ion-color-dark);
+    line-height: 1.6;
+  }
+}

@@ -1,0 +1,69 @@
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div class="content-wrapper">
+    <!-- Loading Screen -->
+    <div *ngIf="isLoading && !isRefreshing" class="loading-container">
+      <div class="bouncing-balls">
+        <div class="ball ball-1"></div>
+        <div class="ball ball-2"></div>
+        <div class="ball ball-3"></div>
+      </div>
+    </div>
+
+    <!-- Empty State Message -->
+    <div *ngIf="!isLoading && !isRefreshing && notifications.length === 0" class="empty-state">
+      <ion-icon name="notifications-outline" class="empty-icon"></ion-icon>
+      <h2 class="empty-title">Keine Benachrichtigungen</h2>
+      <p class="empty-description">Sobald jemand auf deine Artikel reagiert oder kommentiert, erscheinen hier Benachrichtigungen.</p>
+      <button class="reload-button" (click)="reloadData()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        Erneut laden
+      </button>
+    </div>
+
+    <!-- Notifications List -->
+    <div *ngIf="!isLoading && notifications.length > 0" class="notifications-container">
+      <ion-list lines="none" class="notifications-list">
+        <ion-item
+          *ngFor="let notification of notifications"
+          class="notification-item"
+          (click)="openNotification(notification)"
+          button>
+          <ion-thumbnail slot="start" class="notification-thumbnail">
+            <img [src]="notification.postImage" [alt]="notification.postTitle">
+          </ion-thumbnail>
+
+          <div class="notification-content">
+            <div class="notification-icon-wrapper">
+              <ion-icon
+                [name]="notification.type === 'request' ? 'person' : 'chatbubble'"
+                class="notification-type-icon"
+                [class.request-icon]="notification.type === 'request'"
+                [class.comment-icon]="notification.type === 'comment'">
+              </ion-icon>
+            </div>
+
+            <ion-label class="notification-label">
+              <h3 class="notification-title">
+                <span class="user-name">{{ notification.userName }}</span>
+                <span class="notification-action" *ngIf="notification.type === 'request'"> möchte deinen Artikel</span>
+                <span class="notification-action" *ngIf="notification.type === 'comment'"> hat kommentiert</span>
+              </h3>
+              <p class="notification-post-title">{{ notification.postTitle }}</p>
+              <p class="notification-message" *ngIf="notification.message">{{ notification.message }}</p>
+              <ion-note class="notification-time">{{ formatTimestamp(notification.timestamp) }}</ion-note>
+            </ion-label>
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>

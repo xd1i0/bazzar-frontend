@@ -1,0 +1,703 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Import Open Sans font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+/**
+ * Custom Global Styles
+ * -----------------------------------------------------
+ */
+
+/* Set Open Sans as the primary font */
+* {
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+html, body {
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* Improve font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom searchbar styling */
+ion-searchbar.custom-searchbar {
+  .searchbar-search-icon {
+    display: none !important;
+  }
+
+  .searchbar-input-container {
+    padding-inline-start: 0 !important;
+    padding-inline-end: 0 !important;
+  }
+
+  input.searchbar-input {
+    padding-inline-start: 12px !important;
+    padding-inline-end: 12px !important;
+    text-align: start !important;
+  }
+}
+
+/* Disable text selection and dragging globally */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Re-enable text selection for input fields */
+input,
+textarea,
+ion-input,
+ion-textarea,
+ion-searchbar input,
+ion-select,
+ion-datetime,
+[contenteditable="true"],
+[contenteditable] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
+}
+
+/* Ensure input containers allow text selection */
+ion-input input,
+ion-textarea textarea,
+ion-searchbar .searchbar-input {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Disable drag for all images */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for clickable images */
+.item-card img,
+.list-image,
+.card-image,
+.clickable-image {
+  pointer-events: auto;
+}
+
+/* Prevent context menu on long press for mobile */
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Prevent highlighting on tap for better mobile experience */
+* {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* Buttons should not be selectable but should remain focusable for accessibility */
+button,
+ion-button,
+ion-fab-button,
+[role="button"] {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Links should not be selectable by default */
+a {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Create Post Modal Styles */
+.create-post-modal {
+  --width: 100%;
+  --max-width: 1200px;
+  --height: 95vh;
+  --max-height: 95vh;
+  --border-radius: 10px 10px 0 0;
+  --backdrop-opacity: 0.6;
+
+  @media (min-width: 768px) {
+    --width: 95%;
+    --height: 85vh;
+    --border-radius: 10px;
+  }
+  
+  // Blur effect for the backdrop only
+  .modal-backdrop {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  // Ensure modal content is crisp and appears above the blur
+  .modal-wrapper {
+    z-index: 10001;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+    filter: none !important; // Ensure modal content is not blurred
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  // Ensure all modal content stays crisp
+  ion-modal,
+  .modal-shadow,
+  .modal-handle {
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Improve modal presentation on desktop */
+@media (min-width: 768px) {
+  .create-post-modal .modal-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Blur background content when modal is open */
+body {
+  // Add transition to all elements that will be blurred
+  ion-app > ion-router-outlet,
+  ion-app > ion-menu,
+  ion-app > ion-split-pane {
+    filter: blur(0px);
+    transition: filter 0.25s ease-in-out;
+  }
+}
+
+body.create-post-modal-open {
+  overflow: hidden;
+
+  // Only blur the main app content, not the modal itself
+  ion-app > ion-router-outlet,
+  ion-app > ion-menu,
+  ion-app > ion-split-pane {
+    filter: blur(3px);
+  }
+}
+
+/* Post Detail Modal Styles */
+.post-detail-modal {
+  --width: 100%;
+  --max-width: 1200px;
+  --height: 95vh;
+  --max-height: 95vh;
+  --border-radius: 10px 10px 0 0;
+  --backdrop-opacity: 0.6;
+
+  @media (min-width: 768px) {
+    --width: 95%;
+    --height: 85vh;
+    --border-radius: 10px;
+  }
+
+  // Blur effect for the backdrop only
+  .modal-backdrop {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.3) !important;
+  }
+
+  // Ensure modal content is crisp and appears above the blur
+  .modal-wrapper {
+    z-index: 10001;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+    filter: none !important; // Ensure modal content is not blurred
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  // Ensure all modal content stays crisp
+  ion-modal,
+  .modal-shadow,
+  .modal-handle {
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Improve modal presentation on desktop */
+@media (min-width: 768px) {
+  .post-detail-modal .modal-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Blur background content when post detail modal is open */
+body.post-detail-modal-open {
+  overflow: hidden;
+
+  // Only blur the main app content, not the modal itself
+  ion-app > ion-router-outlet,
+  ion-app > ion-menu,
+  ion-app > ion-split-pane {
+    filter: blur(3px);
+  }
+}
+
+/* Edit Post Modal Styles */
+.edit-post-modal {
+  --width: 100%;
+  --max-width: 1200px;
+  --height: 95vh;
+  --max-height: 95vh;
+  --border-radius: 10px 10px 0 0;
+  --backdrop-opacity: 0.6;
+
+  @media (min-width: 768px) {
+    --width: 95%;
+    --height: 85vh;
+    --border-radius: 10px;
+  }
+
+  // Blur effect for the backdrop only
+  .modal-backdrop {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.3) !important;
+  }
+
+  // Ensure modal content is crisp and appears above the blur
+  .modal-wrapper {
+    z-index: 10001;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+    filter: none !important; // Ensure modal content is not blurred
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  // Ensure all modal content stays crisp
+  ion-modal,
+  .modal-shadow,
+  .modal-handle {
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Improve modal presentation on desktop */
+@media (min-width: 768px) {
+  .edit-post-modal .modal-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Blur background content when edit post modal is open */
+body.edit-post-modal-open {
+  overflow: hidden;
+
+  // Only blur the main app content, not the modal itself
+  ion-app > ion-router-outlet,
+  ion-app > ion-menu,
+  ion-app > ion-split-pane {
+    filter: blur(3px);
+  }
+}
+
+/**
+ * Custom Alert Styles (AlertController)
+ * -----------------------------------------------------
+ * Matches app design guidelines with brand colors and typography
+ */
+
+ion-alert {
+  // Alert container
+  --background: #FFFFFF;
+  --max-width: 320px;
+  --min-width: 280px;
+  --width: 90%;
+
+  // Backdrop
+  --backdrop-opacity: 0.6;
+
+  .alert-wrapper {
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  // Alert header
+  .alert-head {
+    padding: 20px 20px 12px 20px;
+
+    h2.alert-title {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1D1D1D;
+      margin: 0;
+      padding: 0;
+      line-height: 1.4;
+    }
+
+    h2.alert-sub-title {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #5C5656;
+      margin-top: 4px;
+    }
+  }
+
+  // Alert message
+  .alert-message {
+    padding: 8px 20px 20px 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #5C5656;
+    line-height: 1.5;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+
+  // Input container (for prompt alerts)
+  .alert-input-group {
+    padding: 0 20px 16px 20px;
+
+    .alert-input-wrapper {
+      margin-bottom: 12px;
+
+      input.alert-input {
+        background: #F7F7F7;
+        border: 1px solid #E0E0E0;
+        border-radius: 10px;
+        padding: 14px 18px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+        color: #1D1D1D;
+
+        &:focus {
+          border-color: #003A79;
+          outline: none;
+          background: #FFFFFF;
+        }
+
+        &::placeholder {
+          color: #aaaaaa;
+        }
+      }
+    }
+  }
+
+  // Button container
+  .alert-button-group {
+    padding: 12px;
+    border-top: none;
+    display: flex;
+    gap: 12px;
+
+    button.alert-button {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      height: 48px;
+      min-height: 48px;
+      margin: 0;
+      border-radius: 10px;
+      border: none;
+      flex: 1;
+      transition: background 0.2s ease, transform 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      .alert-button-inner {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        width: 100%;
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      // Default/Cancel button (role: cancel)
+      &[aria-label*="cancel"],
+      &[aria-label*="Cancel"],
+      &[aria-label*="Abbrechen"] {
+        color: #5C5656;
+        background: #F7F7F7;
+        border: 1px solid #E0E0E0;
+
+        &:hover,
+        &:active {
+          background: #EEEEEE;
+        }
+      }
+
+      // Primary/Confirm button (no specific role)
+      &:not([aria-label*="cancel"]):not([aria-label*="Cancel"]):not([aria-label*="Abbrechen"]):not(.alert-button-role-destructive) {
+        color: #FFFFFF;
+        background: #003A79;
+        font-weight: 700;
+
+        &:hover,
+        &:active {
+          background: #002a5a;
+        }
+      }
+
+      // Destructive button (role: destructive)
+      &.alert-button-role-destructive {
+        color: #FFFFFF;
+        background: #dc3545;
+        font-weight: 700;
+
+        &:hover,
+        &:active {
+          background: #c82333;
+        }
+      }
+
+      // OK button styling
+      &[aria-label="OK"],
+      &[aria-label="Ok"] {
+        color: #FFFFFF;
+        background: #003A79;
+        font-weight: 700;
+
+        &:hover,
+        &:active {
+          background: #002a5a;
+        }
+      }
+    }
+  }
+}
+
+// Backdrop blur effect
+ion-alert::part(backdrop) {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/**
+ * Custom Toast Styles (ToastController)
+ * -----------------------------------------------------
+ * Matches app design guidelines with brand colors and typography
+ */
+
+ion-toast {
+  // Toast container positioning
+  --border-radius: 10px;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --min-width: 280px;
+  --max-width: 90%;
+  --width: auto;
+
+  .toast-wrapper {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 0 16px 16px 16px;
+  }
+
+  // Toast message
+  .toast-message {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 0;
+  }
+
+  // Toast button
+  .toast-button {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 12px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &:hover {
+      opacity: 0.85;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Success toast
+  &.toast-success {
+    --background: #4CAF50;
+    --color: #FFFFFF;
+    --button-color: #FFFFFF;
+  }
+
+  // Error/Danger toast
+  &.toast-danger,
+  &.toast-error {
+    --background: #dc3545;
+    --color: #FFFFFF;
+    --button-color: #FFFFFF;
+  }
+
+  // Warning toast
+  &.toast-warning {
+    --background: #FF8A41;
+    --color: #FFFFFF;
+    --button-color: #FFFFFF;
+  }
+
+  // Info toast
+  &.toast-info {
+    --background: #003A79;
+    --color: #FFFFFF;
+    --button-color: #FFFFFF;
+  }
+
+  // Light toast (for neutral messages)
+  &.toast-light {
+    --background: #F7F7F7;
+    --color: #1D1D1D;
+    --button-color: #003A79;
+
+    .toast-wrapper {
+      border: 1px solid #E0E0E0;
+    }
+  }
+
+  // Dark toast
+  &.toast-dark {
+    --background: #1D1D1D;
+    --color: #FFFFFF;
+    --button-color: #FFFFFF;
+  }
+}
+
+/**
+ * Custom Loading Styles (LoadingController)
+ * -----------------------------------------------------
+ * Matches app design guidelines with brand colors and typography
+ */
+
+ion-loading {
+  // Loading container
+  --background: #FFFFFF;
+  --spinner-color: #003A79;
+  --max-width: 280px;
+  --min-width: 200px;
+  --width: auto;
+
+  // Backdrop
+  --backdrop-opacity: 0.6;
+
+  .loading-wrapper {
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 24px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  // Loading spinner
+  .loading-spinner {
+    color: #003A79;
+    width: 36px;
+    height: 36px;
+    margin-bottom: 16px;
+  }
+
+  // Loading message
+  .loading-content {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1D1D1D;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// Loading backdrop blur effect
+ion-loading::part(backdrop) {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}

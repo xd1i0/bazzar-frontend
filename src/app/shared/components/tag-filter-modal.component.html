@@ -1,0 +1,46 @@
+<ion-content class="tag-filter-content">
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h1 class="modal-title">Filter Tags</h1>
+    <button class="close-button" (click)="cancel()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </div>
+
+  <!-- Selected Count and Clear All -->
+  <div class="filter-info" *ngIf="availableTags.length > 0">
+    <div class="selected-info">
+      <span class="selected-count">{{ selectedCount }} ausgewählt</span>
+    </div>
+    <button class="clear-button" (click)="clearAll()" [disabled]="selectedCount === 0">
+      Alle löschen
+    </button>
+  </div>
+
+  <!-- Tags List -->
+  <div class="tags-container" *ngIf="availableTags.length > 0">
+    <div class="tag-item" *ngFor="let tag of availableTags">
+      <ion-checkbox
+        [checked]="isTagSelected(tag)"
+        (ionChange)="toggleTag(tag)"
+        labelPlacement="end">
+        {{ tag }}
+      </ion-checkbox>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="availableTags.length === 0">
+    <ion-icon name="pricetag-outline" class="empty-icon"></ion-icon>
+    <p class="empty-text">Keine Tags verfügbar</p>
+  </div>
+
+  <!-- Floating Action Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button
+      (click)="apply()"
+      class="apply-fab">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

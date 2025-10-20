@@ -1,0 +1,97 @@
+<ion-content [fullscreen]="true" class="auth-content">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="assets/shared/LOGO.svg" alt="Logo" class="auth-logo">
+      </div>
+
+      <form class="auth-form" (ngSubmit)="onSubmit()">
+        @if (!isLogin) {
+          <div class="input-group">
+            <label for="vorname">Vorname</label>
+            <ion-input
+              id="vorname"
+              type="text"
+              [(ngModel)]="vorname"
+              name="vorname"
+              placeholder="Gebe deinen Vornamen an"
+              [disabled]="isLoading"
+            ></ion-input>
+          </div>
+
+          <div class="input-group">
+            <label for="name">Name</label>
+            <ion-input
+              id="name"
+              type="text"
+              [(ngModel)]="name"
+              name="name"
+              placeholder="Gebe deinen Namen an"
+              [disabled]="isLoading"
+            ></ion-input>
+          </div>
+
+          <div class="input-group">
+            <label for="zenturie">Zenturie</label>
+            <ion-input
+              id="zenturie"
+              type="text"
+              [(ngModel)]="zenturie"
+              name="zenturie"
+              placeholder="Gebe deine Zenturie an"
+              [disabled]="isLoading"
+            ></ion-input>
+          </div>
+        }
+
+        <div class="input-group">
+          <label for="email">E-Mail</label>
+          <ion-input
+            id="email"
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="Gebe deine E-Mail an"
+            [disabled]="isLoading"
+          ></ion-input>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Passwort</label>
+          <ion-input
+            id="password"
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="Gebe dein Passwort ein"
+            [disabled]="isLoading"
+          ></ion-input>
+        </div>
+
+        @if (errorMessage) {
+          <div class="error-message">
+            <ion-text color="danger">{{ errorMessage }}</ion-text>
+          </div>
+        }
+
+        <ion-button
+          expand="block"
+          type="submit"
+          class="submit-button"
+          [disabled]="isLoading"
+        >
+          {{ isLoading ? 'Bitte warten...' : (isLogin ? 'Anmelden' : 'Registrieren') }}
+        </ion-button>
+      </form>
+
+      <div class="toggle-mode">
+        <p>
+          {{ isLogin ? "Kein Account?" : 'Bereits einen Account?' }}
+          <a (click)="toggleMode()">
+            {{ isLogin ? 'Registrieren' : 'Anmelden' }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

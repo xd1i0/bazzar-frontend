@@ -1,0 +1,141 @@
+<ion-header [translucent]="false">
+  <ion-toolbar class="header-toolbar">
+    <div class="header-content">
+      <div class="header-left">
+        <ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <div class="logo-icon">
+          <ion-icon name="heart"></ion-icon>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="search-wrapper">
+          <button class="search-button">
+            <ion-icon name="search"></ion-icon>
+          </button>
+          <ion-searchbar
+            [(ngModel)]="searchText"
+            placeholder="Heiße Ludolph Seminare in meiner Umgebung..."
+            class="custom-searchbar"
+            search-icon="none">
+          </ion-searchbar>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="view-toggle">
+          <button
+            class="view-toggle-button"
+            [class.active]="viewMode === 'grid'"
+            (click)="setViewMode('grid')">
+            <ion-icon name="grid-outline"></ion-icon>
+          </button>
+          <button
+            class="view-toggle-button"
+            [class.active]="viewMode === 'list'"
+            (click)="setViewMode('list')">
+            <ion-icon name="list-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="">
+    </ion-refresher-content>
+  </ion-refresher>
+  
+  <div class="content-wrapper">
+    <!-- Loading Screen -->
+    <div *ngIf="isLoading && !isRefreshing" class="loading-container">
+      <div class="bouncing-balls">
+        <div class="ball ball-1"></div>
+        <div class="ball ball-2"></div>
+        <div class="ball ball-3"></div>
+      </div>
+    </div>
+
+    <!-- Empty State Message -->
+    <div *ngIf="!isLoading && !isRefreshing && items.length === 0" class="empty-state">
+      <ion-icon name="heart-outline" class="empty-icon"></ion-icon>
+      <h2 class="empty-title">Keine Favoriten vorhanden</h2>
+      <p class="empty-description">Du hast noch keine Artikel als Favoriten markiert. Gehe zum Bazzar und markiere interessante Artikel mit dem Herz-Symbol!</p>
+    </div>
+
+    <!-- Grid View -->
+    <div *ngIf="(!isLoading || isRefreshing) && viewMode === 'grid' && items.length > 0" class="grid-view">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of filteredItems">
+            <div class="item-card" (click)="onCardClick(item)">
+              <img [src]="item.image" [alt]="item.title" class="card-image" />
+              <div class="tags-container">
+                <div class="tag-badge" *ngFor="let tag of item.tagObjects">
+                  <div class="tag-circle" [style.background-color]="tag.color"></div>
+                  <span class="tag-name">{{ tag.name }}</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                @if (authService.currentUserProfile()) {
+                  <div class="profile-avatar">
+                    <ion-icon name="person"></ion-icon>
+                  </div>
+                  <div class="card-info">
+                    <h3 class="post-title">{{ item.title }}</h3>
+                    <p class="post-description">{{ item.description }}</p>
+                  </div>
+                }
+                <button
+                  class="favorite-button"
+                  (click)="toggleFavorite(item, $event)"
+                  [class.favorited]="item.isFavorite">
+                  <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                </button>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- List View -->
+    <div *ngIf="(!isLoading || isRefreshing) && viewMode === 'list' && items.length > 0" class="list-view">
+      <div class="list-item" *ngFor="let item of filteredItems" (click)="onCardClick(item)">
+        <div class="list-content">
+          @if (authService.currentUserProfile()) {
+            <div class="profile-avatar">
+              <ion-icon name="person"></ion-icon>
+            </div>
+            <div class="list-info">
+              <h3 class="post-title">{{ item.title }}</h3>
+              <p class="post-description">{{ item.description }}</p>
+            </div>
+          }
+          <button
+            class="favorite-button"
+            (click)="toggleFavorite(item, $event)"
+            [class.favorited]="item.isFavorite">
+            <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+          </button>
+        </div>
+        <img [src]="item.image" [alt]="item.title" class="list-image" />
+      </div>
+    </div>
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button class="custom-fab">
+      <span class="fab-text">Inserieren</span>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

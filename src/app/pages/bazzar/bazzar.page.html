@@ -1,0 +1,427 @@
+<ion-header [translucent]="false">
+  <ion-toolbar class="header-toolbar">
+    <div class="header-content">
+      <div class="header-left">
+        <ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <button class="logo-icon" (click)="openTagFilterModal()" [class.active]="hasActiveTagFilters">
+          <ion-icon name="pricetag-outline"></ion-icon>
+          <span class="filter-badge" *ngIf="hasActiveTagFilters">{{ selectedTagCount }}</span>
+        </button>
+      </div>
+
+      <div class="header-center">
+        <div class="search-wrapper">
+          <button class="search-button">
+            <ion-icon name="search"></ion-icon>
+          </button>
+          <ion-searchbar
+            [(ngModel)]="searchText"
+            placeholder="Ludolph Seminar in meiner Nähe..."
+            class="custom-searchbar"
+            search-icon="none">
+          </ion-searchbar>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="view-toggle">
+          <button
+            class="view-toggle-button"
+            [class.active]="viewMode === 'grid'"
+            (click)="setViewMode('grid')">
+            <ion-icon name="grid-outline"></ion-icon>
+          </button>
+          <button
+            class="view-toggle-button"
+            [class.active]="viewMode === 'list'"
+            (click)="setViewMode('list')">
+            <ion-icon name="list-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="">
+    </ion-refresher-content>
+  </ion-refresher>
+  
+  <div class="content-wrapper">
+    <!-- Loading Screen -->
+    <div *ngIf="isLoading && !isRefreshing" class="loading-container">
+      <div class="bouncing-balls">
+        <div class="ball ball-1"></div>
+        <div class="ball ball-2"></div>
+        <div class="ball ball-3"></div>
+      </div>
+    </div>
+
+    <!-- Empty State Message -->
+    <div *ngIf="!isLoading && !isRefreshing && items.length === 0" class="empty-state">
+      <ion-icon name="pricetag-outline" class="empty-icon"></ion-icon>
+      <h2 class="empty-title">Keine Beiträge vorhanden</h2>
+      <p class="empty-description">Es wurden noch keine Artikel veröffentlicht. Sei der Erste und erstelle ein Inserat!</p>
+      <button class="reload-button" (click)="reloadData()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        Erneut laden
+      </button>
+    </div>
+
+    <!-- Search Results View (when search is active) -->
+    <div *ngIf="(!isLoading || isRefreshing) && !showCategorizedView && items.length > 0">
+      <!-- Grid View -->
+      <div *ngIf="viewMode === 'grid'" class="grid-view">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of filteredItems; trackBy: trackByItemId">
+              <div class="item-card" (click)="onCardClick(item)" [class.terminated]="item.isTerminated">
+                <img [src]="item.image" [alt]="item.title" class="card-image" />
+                <div class="terminated-overlay" *ngIf="item.isTerminated">
+                  <div class="terminated-badge-card">Abgeschlossen</div>
+                </div>
+                <div class="tags-container">
+                  <div class="tag-badge" *ngFor="let tag of item.tagObjects; trackBy: trackByTagName">
+                    <div class="tag-circle" [style.background-color]="tag.color"></div>
+                    <span class="tag-name">{{ tag.name }}</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  @if (authService.currentUserProfile()) {
+                    <div class="profile-avatar">
+                      <ion-icon name="person"></ion-icon>
+                    </div>
+                    <div class="card-info">
+                      <h3 class="post-title">{{ item.title }}</h3>
+                      <p class="post-description">{{ item.description }}</p>
+                    </div>
+                  }
+                  <button
+                    class="favorite-button"
+                    (click)="toggleFavorite(item, $event)"
+                    [class.favorited]="item.isFavorite">
+                    <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                  </button>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+
+      <!-- List View -->
+      <div *ngIf="viewMode === 'list'" class="list-view">
+        <div class="list-item" *ngFor="let item of filteredItems; trackBy: trackByItemId" (click)="onCardClick(item)">
+          <div class="list-content">
+            @if (authService.currentUserProfile()) {
+              <div class="profile-avatar">
+                <ion-icon name="person"></ion-icon>
+              </div>
+              <div class="list-info">
+                <h3 class="post-title">{{ item.title }}</h3>
+                <p class="post-description">{{ item.description }}</p>
+              </div>
+            }
+            <button
+              class="favorite-button"
+              (click)="toggleFavorite(item, $event)"
+              [class.favorited]="item.isFavorite">
+              <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+            </button>
+          </div>
+          <img [src]="item.image" [alt]="item.title" class="list-image" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Categorized View (when no search active) -->
+    <div *ngIf="(!isLoading || isRefreshing) && showCategorizedView && items.length > 0" class="categorized-view">
+      <!-- Vorschläge Section -->
+      <div *ngIf="vorschlaegeItems.length > 0" class="category-section">
+        <h2 class="category-title">Vorschläge</h2>
+
+        <!-- Grid View -->
+        <div *ngIf="viewMode === 'grid'" class="grid-view">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of vorschlaegeItems; trackBy: trackByItemId">
+                <div class="item-card" (click)="onCardClick(item)" [class.terminated]="item.isTerminated">
+                  <img [src]="item.image" [alt]="item.title" class="card-image" />
+                  <div class="terminated-overlay" *ngIf="item.isTerminated">
+                    <div class="terminated-badge-card">Abgeschlossen</div>
+                  </div>
+                  <div class="tags-container">
+                    <div class="tag-badge" *ngFor="let tag of item.tagObjects; trackBy: trackByTagName">
+                      <div class="tag-circle" [style.background-color]="tag.color"></div>
+                      <span class="tag-name">{{ tag.name }}</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    @if (authService.currentUserProfile()) {
+                      <div class="profile-avatar">
+                        <ion-icon name="person"></ion-icon>
+                      </div>
+                      <div class="card-info">
+                        <h3 class="post-title">{{ item.title }}</h3>
+                        <p class="post-description">{{ item.description }}</p>
+                      </div>
+                    }
+                    <button
+                      class="favorite-button"
+                      (click)="toggleFavorite(item, $event)"
+                      [class.favorited]="item.isFavorite">
+                      <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                    </button>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="viewMode === 'list'" class="list-view">
+          <div class="list-item" *ngFor="let item of vorschlaegeItems; trackBy: trackByItemId" (click)="onCardClick(item)">
+            <div class="list-content">
+              @if (authService.currentUserProfile()) {
+                <div class="profile-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </div>
+                <div class="list-info">
+                  <h3 class="post-title">{{ item.title }}</h3>
+                  <p class="post-description">{{ item.description }}</p>
+                </div>
+              }
+              <button
+                class="favorite-button"
+                (click)="toggleFavorite(item, $event)"
+                [class.favorited]="item.isFavorite">
+                <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+              </button>
+            </div>
+            <img [src]="item.image" [alt]="item.title" class="list-image" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Seminare Section -->
+      <div *ngIf="seminareItems.length > 0" class="category-section">
+        <h2 class="category-title">Seminare</h2>
+
+        <!-- Grid View -->
+        <div *ngIf="viewMode === 'grid'" class="grid-view">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of seminareItems; trackBy: trackByItemId">
+                <div class="item-card" (click)="onCardClick(item)" [class.terminated]="item.isTerminated">
+                  <img [src]="item.image" [alt]="item.title" class="card-image" />
+                  <div class="terminated-overlay" *ngIf="item.isTerminated">
+                    <div class="terminated-badge-card">Abgeschlossen</div>
+                  </div>
+                  <div class="tags-container">
+                    <div class="tag-badge" *ngFor="let tag of item.tagObjects; trackBy: trackByTagName">
+                      <div class="tag-circle" [style.background-color]="tag.color"></div>
+                      <span class="tag-name">{{ tag.name }}</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    @if (authService.currentUserProfile()) {
+                      <div class="profile-avatar">
+                        <ion-icon name="person"></ion-icon>
+                      </div>
+                      <div class="card-info">
+                        <h3 class="post-title">{{ item.title }}</h3>
+                        <p class="post-description">{{ item.description }}</p>
+                      </div>
+                    }
+                    <button
+                      class="favorite-button"
+                      (click)="toggleFavorite(item, $event)"
+                      [class.favorited]="item.isFavorite">
+                      <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                    </button>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="viewMode === 'list'" class="list-view">
+          <div class="list-item" *ngFor="let item of seminareItems; trackBy: trackByItemId" (click)="onCardClick(item)">
+            <div class="list-content">
+              @if (authService.currentUserProfile()) {
+                <div class="profile-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </div>
+                <div class="list-info">
+                  <h3 class="post-title">{{ item.title }}</h3>
+                  <p class="post-description">{{ item.description }}</p>
+                </div>
+              }
+              <button
+                class="favorite-button"
+                (click)="toggleFavorite(item, $event)"
+                [class.favorited]="item.isFavorite">
+                <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+              </button>
+            </div>
+            <img [src]="item.image" [alt]="item.title" class="list-image" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Wohnungen Section -->
+      <div *ngIf="wohnungenItems.length > 0" class="category-section">
+        <h2 class="category-title">Wohnungen</h2>
+
+        <!-- Grid View -->
+        <div *ngIf="viewMode === 'grid'" class="grid-view">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of wohnungenItems; trackBy: trackByItemId">
+                <div class="item-card" (click)="onCardClick(item)" [class.terminated]="item.isTerminated">
+                  <img [src]="item.image" [alt]="item.title" class="card-image" />
+                  <div class="terminated-overlay" *ngIf="item.isTerminated">
+                    <div class="terminated-badge-card">Abgeschlossen</div>
+                  </div>
+                  <div class="tags-container">
+                    <div class="tag-badge" *ngFor="let tag of item.tagObjects; trackBy: trackByTagName">
+                      <div class="tag-circle" [style.background-color]="tag.color"></div>
+                      <span class="tag-name">{{ tag.name }}</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    @if (authService.currentUserProfile()) {
+                      <div class="profile-avatar">
+                        <ion-icon name="person"></ion-icon>
+                      </div>
+                      <div class="card-info">
+                        <h3 class="post-title">{{ item.title }}</h3>
+                        <p class="post-description">{{ item.description }}</p>
+                      </div>
+                    }
+                    <button
+                      class="favorite-button"
+                      (click)="toggleFavorite(item, $event)"
+                      [class.favorited]="item.isFavorite">
+                      <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                    </button>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="viewMode === 'list'" class="list-view">
+          <div class="list-item" *ngFor="let item of wohnungenItems; trackBy: trackByItemId" (click)="onCardClick(item)">
+            <div class="list-content">
+              @if (authService.currentUserProfile()) {
+                <div class="profile-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </div>
+                <div class="list-info">
+                  <h3 class="post-title">{{ item.title }}</h3>
+                  <p class="post-description">{{ item.description }}</p>
+                </div>
+              }
+              <button
+                class="favorite-button"
+                (click)="toggleFavorite(item, $event)"
+                [class.favorited]="item.isFavorite">
+                <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+              </button>
+            </div>
+            <img [src]="item.image" [alt]="item.title" class="list-image" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Alle Section -->
+      <div *ngIf="alleItems.length > 0" class="category-section">
+        <h2 class="category-title">Alle</h2>
+
+        <!-- Grid View -->
+        <div *ngIf="viewMode === 'grid'" class="grid-view">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-lg="4" *ngFor="let item of alleItems; trackBy: trackByItemId">
+                <div class="item-card" (click)="onCardClick(item)" [class.terminated]="item.isTerminated">
+                  <img [src]="item.image" [alt]="item.title" class="card-image" />
+                  <div class="terminated-overlay" *ngIf="item.isTerminated">
+                    <div class="terminated-badge-card">Abgeschlossen</div>
+                  </div>
+                  <div class="tags-container">
+                    <div class="tag-badge" *ngFor="let tag of item.tagObjects; trackBy: trackByTagName">
+                      <div class="tag-circle" [style.background-color]="tag.color"></div>
+                      <span class="tag-name">{{ tag.name }}</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    @if (authService.currentUserProfile()) {
+                      <div class="profile-avatar">
+                        <ion-icon name="person"></ion-icon>
+                      </div>
+                      <div class="card-info">
+                        <h3 class="post-title">{{ item.title }}</h3>
+                        <p class="post-description">{{ item.description }}</p>
+                      </div>
+                    }
+                    <button
+                      class="favorite-button"
+                      (click)="toggleFavorite(item, $event)"
+                      [class.favorited]="item.isFavorite">
+                      <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+                    </button>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="viewMode === 'list'" class="list-view">
+          <div class="list-item" *ngFor="let item of alleItems; trackBy: trackByItemId" (click)="onCardClick(item)">
+            <div class="list-content">
+              @if (authService.currentUserProfile()) {
+                <div class="profile-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </div>
+                <div class="list-info">
+                  <h3 class="post-title">{{ item.title }}</h3>
+                  <p class="post-description">{{ item.description }}</p>
+                </div>
+              }
+              <button
+                class="favorite-button"
+                (click)="toggleFavorite(item, $event)"
+                [class.favorited]="item.isFavorite">
+                <ion-icon [name]="item.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+              </button>
+            </div>
+            <img [src]="item.image" [alt]="item.title" class="list-image" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button class="custom-fab" (click)="openCreatePostModal()">
+      <span class="fab-text">Inserieren</span>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,60 @@
+<ion-content [fullscreen]="true" class="verification-content">
+  <div class="verification-container">
+    <div class="verification-card">
+      <div class="verification-header">
+        <img src="assets/shared/LOGO.svg" alt="Logo" class="verification-logo">
+      </div>
+
+      <div class="verification-form">
+        <h1 class="verification-title">Bestätige deine E-Mail</h1>
+
+        <p class="verification-message">
+          Wir haben eine Bestätigungs-E-Mail an <strong>{{ userEmail }}</strong> gesendet.
+        </p>
+        <p class="verification-message">
+          Bitte überprüfe dein Postfach und klicke auf den Bestätigungslink, um deinen Account zu aktivieren.
+        </p>
+
+        <div class="error-message" *ngIf="resendError">
+          <ion-text>{{ resendError }}</ion-text>
+        </div>
+
+        <ion-button
+          expand="block"
+          class="submit-button"
+          (click)="checkVerification()"
+          [disabled]="isChecking">
+          <ion-spinner *ngIf="isChecking" name="crescent"></ion-spinner>
+          <span *ngIf="!isChecking">Ich habe meine E-Mail bestätigt</span>
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          class="resend-button"
+          fill="outline"
+          (click)="resendEmail()"
+          [disabled]="isResending || resendSuccess">
+          <ion-spinner *ngIf="isResending" name="crescent"></ion-spinner>
+          <span *ngIf="!isResending && !resendSuccess">E-Mail erneut senden</span>
+          <span *ngIf="resendSuccess">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            E-Mail gesendet!
+          </span>
+        </ion-button>
+
+        <div class="info-box">
+          <p>
+            <strong>Hinweis:</strong> Falls du keine E-Mail erhalten hast, überprüfe bitte deinen Spam-Ordner.
+          </p>
+        </div>
+
+        <div class="logout-section">
+          <p>
+            Falsches Konto?
+            <a (click)="logout()">Abmelden</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

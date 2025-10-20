@@ -1,0 +1,449 @@
+// Loading animation
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f2f5 0%, #e6e9ed 100%);
+}
+
+.bouncing-balls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.ball {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.ball-1 {
+  background: #003A79;
+  animation-delay: 0s;
+}
+
+.ball-2 {
+  background: #FF8A41;
+  animation-delay: 0.2s;
+}
+
+.ball-3 {
+  background: #003A79;
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+// Doomies container - centers the phone view
+.doomies-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  background: linear-gradient(135deg, #f0f2f5 0%, #e6e9ed 100%);
+  padding: 20px;
+}
+
+// Phone frame - iPhone-like design
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  max-height: 90vh;
+  background-color: #1D1D1D;
+  border: 14px solid #1D1D1D;
+  border-radius: 40px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+// Phone notch
+.phone-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 25px;
+  background-color: #1D1D1D;
+  border-radius: 0 0 20px 20px;
+  z-index: 100;
+}
+
+// Scrollable content area with snap scrolling
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+
+  // Hide scrollbar but keep functionality
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Infinite scroll within the phone view
+  ion-infinite-scroll {
+    min-height: 100px;
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+}
+
+// Individual post card - full screen within phone
+.short-card {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: #000;
+  color: #fff;
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+
+  // Invisible scroll trigger for intersection observer
+  .scroll-trigger {
+    position: absolute;
+    bottom: 50%;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.meme-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Center content vertically
+  align-items: center; // Center content horizontally
+  height: 100%;
+  padding: 10px;
+}
+
+// Post image - full background
+.short-image {
+  width: 100%;
+  display: block;
+  transition: opacity 0.5s ease-in-out;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bazzar-image {
+  height: 100%;
+  object-fit: contain;
+}
+
+.meme-image {
+  object-fit: contain;
+  height: auto;
+  max-height: 80%; // Limit image height to not overflow
+  width: 100%;
+}
+
+// Header with avatar and username
+.short-header {
+  position: absolute;
+  top: 25px; // Below notch
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  z-index: 10;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+
+  .profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #003A79;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 20px;
+      color: #FAFAFA;
+    }
+  }
+
+  .author-info {
+    margin-left: 12px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+
+    strong {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+  }
+}
+
+// Carousel indicators
+.carousel-indicators {
+  position: absolute;
+  top: 80px; // Below header
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  .indicator-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+
+    &.active {
+      width: 20px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.95);
+    }
+  }
+}
+
+// Content overlay at bottom
+.short-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  //right: 70px; // Space for actions
+  z-index: 10;
+  padding: 20px 16px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.7) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.meme-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  padding: 20px 16px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.7) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Action buttons on the right
+.short-actions {
+  position: absolute;
+  right: 12px;
+  bottom: 120px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  .action-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+
+    ion-icon {
+      font-size: 28px;
+      color: #fff;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      transition: color 0.3s ease;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.favorited {
+      background: rgba(255, 138, 65, 0.3);
+
+      ion-icon {
+        color: #FF8A41;
+      }
+
+      &:hover {
+        background: rgba(255, 138, 65, 0.4);
+      }
+    }
+  }
+}
+
+// Responsive adjustments for smaller desktop screens
+@media (max-height: 900px) {
+  .phone-frame {
+    height: 700px;
+  }
+}
+
+@media (max-height: 750px) {
+  .phone-frame {
+    height: 600px;
+  }
+}
+
+// Mobile/Phone view - Remove simulated phone frame and go fullscreen
+@media (max-width: 768px) {
+  .doomies-container {
+    padding: 0;
+    background: #000;
+    min-height: 100vh;
+    height: 100vh;
+  }
+
+  .phone-frame {
+    width: 100vw;
+    height: 100vh;
+    max-height: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
+
+  .phone-notch {
+    display: none;
+  }
+
+  .short-header {
+    top: 0; // No notch to account for on mobile
+  }
+
+  .scrollable-content {
+    height: 100vh;
+  }
+}
+
+// Dark mode overrides - maintain light background
+@media (prefers-color-scheme: dark) {
+  .loading-container,
+  .doomies-container {
+    background: linear-gradient(135deg, #f0f2f5 0%, #e6e9ed 100%);
+  }
+}

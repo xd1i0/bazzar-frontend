@@ -1,0 +1,205 @@
+// Tag Filter Modal - Matching project design language
+.tag-filter-content {
+  --padding-start: 32px;
+  --padding-end: 32px;
+  --padding-top: 24px;
+  --padding-bottom: 32px;
+  --background: #FFF;
+
+  // Ensure modal content is never blurred
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+// Modal Header - matching create-post-modal
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .modal-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #003A79;
+    margin: 0;
+  }
+
+  .close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F7F7F7;
+    border: 2px solid #003A79;
+    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #003A79;
+
+      ion-icon {
+        color: #F7F7F7;
+      }
+    }
+
+    ion-icon {
+      font-size: 24px;
+      color: #003A79;
+      transition: color 0.3s ease;
+    }
+  }
+}
+
+// Filter Info Section
+.filter-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E0E0E0;
+
+  .selected-info {
+    .selected-count {
+      font-size: 14px;
+      font-weight: 600;
+      color: #003A79;
+    }
+  }
+
+  .clear-button {
+    background: transparent;
+    border: 2px solid #003A79;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #003A79;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background: #003A79;
+      color: #FFFFFF;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: #E0E0E0;
+      color: #999999;
+    }
+  }
+}
+
+// Tags Container
+.tags-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 80px; // Extra space for FAB
+}
+
+.tag-item {
+  background: #F7F7F7;
+  border-radius: 10px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #EEF4FB;
+  }
+
+  ion-checkbox {
+    --size: 24px;
+    --checkbox-background-checked: #003A79;
+    --border-color: #003A79;
+    --border-color-checked: #003A79;
+    --checkmark-color: #FFFFFF;
+    --border-width: 2px;
+    font-size: 16px;
+    color: #333333;
+    font-weight: 500;
+    width: 100%;
+    margin: 0;
+
+    &::part(label) {
+      padding-left: 12px;
+    }
+  }
+}
+
+// Empty State - matching project empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+  min-height: 300px;
+
+  .empty-icon {
+    font-size: 80px;
+    color: #003A79;
+    opacity: 0.5;
+    margin-bottom: 24px;
+  }
+
+  .empty-text {
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// Floating Action Button - matching create-post-modal
+ion-fab {
+  margin-bottom: 16px;
+  margin-right: 16px;
+
+  .apply-fab {
+    --background: #FF8A41 !important;
+    --background-activated: #FF8A41 !important;
+    --background-focused: #FF8A41 !important;
+    --background-hover: #FF8A41 !important;
+    --color: #FAFAFA !important;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --border-radius: 10px;
+    border-radius: 10px;
+    width: 56px;
+    height: 56px;
+
+    &:hover {
+      --background: #e67834 !important;
+    }
+
+    &:active {
+      --background: #d46d2e !important;
+    }
+
+    ion-icon {
+      color: #FAFAFA !important;
+      font-size: 24px;
+    }
+  }
+}
+
+// Ensure the entire modal component is never blurred
+:host {
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  * {
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
