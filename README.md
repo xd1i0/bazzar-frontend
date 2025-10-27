@@ -1,4 +1,3 @@
-```markdown
 # Bazzar — Ionic + Angular Frontend
 
 A frontend application built with Ionic and Angular. This repository contains the Ionic/Angular client app (Capacitor-ready) for the Bazzar project.
@@ -111,10 +110,3 @@ The project includes Jasmine/Karma configuration for tests and ESLint for lintin
 - Open issues for bugs, feature requests, or improvements.
 - Fork the repository and create PRs for proposed changes.
 - Keep commits small and descriptive; follow an established commit message style if your team uses one.
-
-## License
-(Include your license here — e.g., MIT)
-
-## Contact
-(Provide contact or maintainer details here)
-```
