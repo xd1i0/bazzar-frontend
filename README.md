@@ -13,13 +13,10 @@ Bazzar is an eBay‑like online marketplace targeted at students: users can list
 - Foster a collaborative student community where resources are shared efficiently
 
 ## Screenshot
-
-![App screenshot](./Screenshot 2025-10-27 at 20.41.58.png)
-
 <!-- Centered + clickable thumbnail + width control -->
 <p align="center">
   <a href="./Screenshot 2025-10-27 at 20.41.58.png">
-    <img src="./Screenshot 2025-10-27 at 20.41.58.png" alt="App screenshot" width="700"/>
+    <img src="./Screenshot 2025-10-27 at 20.41.58.png" alt="App screenshot" width="800"/>
   </a>
 </p>
 
