@@ -1,8 +1,17 @@
+```markdown
 # Bazzar — Ionic + Angular Frontend
 
 A frontend application built with Ionic and Angular. This repository contains the Ionic/Angular client app (Capacitor-ready) for the Bazzar project.
 
 Minimal, focused README to get you up and running.
+
+## Hackathon & goals
+This project was created as part of a hackathon at NORDAKADEMIE with the goal of improving daily life for students. The main intent is to reduce the number of mass emails sent to all students about flats, cars, and especially course takeovers — notifications that often flood inboxes when items or course spots are posted frequently.
+
+Bazzar is an eBay‑like online marketplace targeted at students: users can list items for sale (e.g., furniture, bikes, cars) and post takeovers or swaps for courses that become available. By centralizing these posts in an easily searchable, filterable UI rather than sending campus-wide emails, the project aims to:
+- Minimize email overload for the student body
+- Make it easier and faster for students to find available course spots, housing, and items
+- Foster a collaborative student community where resources are shared efficiently
 
 ## Key technologies
 - Angular 20
@@ -102,3 +111,10 @@ The project includes Jasmine/Karma configuration for tests and ESLint for lintin
 - Open issues for bugs, feature requests, or improvements.
 - Fork the repository and create PRs for proposed changes.
 - Keep commits small and descriptive; follow an established commit message style if your team uses one.
+
+## License
+(Include your license here — e.g., MIT)
+
+## Contact
+(Provide contact or maintainer details here)
+```
